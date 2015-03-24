@@ -194,4 +194,8 @@ Scored(md, score)
 })
 
 
+ct.filter(s => s.score >= 4.0).map(s => s.md.matched).countByValue()
+ct.filter(s => s.score >= 2.0).map(s => s.md.matched).countByValue()
+
+// end
 
