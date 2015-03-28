@@ -28,4 +28,15 @@ val artistByID = rawArtistData.flatMap{ line =>
 
 
    
+// read artist_alias
+val rawArtistAlias = sc.textFile("/opt/mount/spark/profiledata_06-May-2005/artist_alias.txt")
+//val rawArtistAlias = sc.textFile("/home/hime/spark/profiledata_06-May-2005/artist_alias.txt")
 
+val artistAlias = rawArtistAlias.flatMap { line =>
+    val  tokens = line.split('\t')
+    if (tokens(0).isEmpty) {
+       None
+    } else {
+       Some((tokens(0).toInt, tokens(1).toInt))
+    }
+}.collectAsMap()
