@@ -40,3 +40,5 @@ val artistAlias = rawArtistAlias.flatMap { line =>
        Some((tokens(0).toInt, tokens(1).toInt))
     }
 }.collectAsMap()
+
+
