@@ -42,3 +42,12 @@ val artistAlias = rawArtistAlias.flatMap { line =>
 }.collectAsMap()
 
 
+import org.apache.spark.mllib.recommendation._
+
+val bArtistAlias = sc.broadcast(artistAlias)
+val  trainData = rawUserArtistData.map { line =>
+    val  Array(userID, artistID, count) = line.split(' ').map(_.toInt)
+    val  finalArtistID = bArtistAlias.value.getOrElse(artistID, artistID)
+    Rating(userID, finalArtistID, count)
+}.cache()
+		       
