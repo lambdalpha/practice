@@ -50,4 +50,9 @@ val  trainData = rawUserArtistData.map { line =>
     val  finalArtistID = bArtistAlias.value.getOrElse(artistID, artistID)
     Rating(userID, finalArtistID, count)
 }.cache()
+
+
+val model = ALS.trainImplicit(trainData, 10, 5, 0.01, 1.0)
 		       
+model.userFeatures.mapValues(_.mkString(", ")).first
+
