@@ -2,7 +2,7 @@ data(iris)
 # SVM
 library(e1071)
 library(ggplot2)
-df <- read.csv("C:/old/backup/R/MLFH/ML_for_Hackers-master/12-Model_Comparison/data/df.csv")
+df <- read.csv("C:/aa/git2/practice/df.csv")
 head(df)
 nrow(df)
 ggplot(df, aes(x=X, y=Y, color=factor(Label))) + geom_point()
@@ -141,6 +141,37 @@ predictions <- melt(df2, id.vars=c('X', 'Y'))
 ggplot(predictions, aes(x=X, y=Y, color=factor(value))) + geom_point() + facet_grid(variable ~ .)
 
 
+# Radial kernel with different gamma hyperparameter
+# 0.7204
+radial.gamma1.svm.fit <- svm(Label~X+Y, data=df, kernel='radial', gamma=1)
+with(df, mean(ifelse(predict(radial.gamma1.svm.fit)>0, 1, 0) == Label))
+
+# 0.7052
+radial.gamma2.svm.fit <- svm(Label~X+Y, data=df, kernel='radial', gamma=2)
+with(df, mean(ifelse(predict(radial.gamma2.svm.fit)>0, 1, 0) == Label))
+
+# 0.6996
+radial.gamma3.svm.fit <- svm(Label~X+Y, data=df, kernel='radial', gamma=3)
+with(df, mean(ifelse(predict(radial.gamma3.svm.fit)>0, 1, 0) == Label))
+
+# 0.694
+radial.gamma4.svm.fit <- svm(Label~X+Y, data=df, kernel='radial', gamma=4)
+with(df, mean(ifelse(predict(radial.gamma4.svm.fit)>0, 1, 0) == Label))
+
+# 
+radial.gamma15.svm.fit <- svm(Label~X+Y, data=df, kernel='radial', gamma=15)
+with(df, mean(ifelse(predict(radial.gamma15.svm.fit)>0, 1, 0) == Label))
+
+df2 <- cbind(df, 
+             data.frame(GAMMA1=ifelse(predict(radial.gamma1.svm.fit)>0, 1, 0),
+                        GAMMA2=ifelse(predict(radial.gamma2.svm.fit)>0, 1, 0),
+                        GAMMA3=ifelse(predict(radial.gamma3.svm.fit)>0, 1, 0),
+                        GAMMA4=ifelse(predict(radial.gamma4.svm.fit)>0, 1, 0),
+                        GAMMA15=ifelse(predict(radial.gamma15.svm.fit)>0, 1, 0)))
+
+predictions <- melt(df2, id.vars=c('X', 'Y'))
+
+ggplot(predictions, aes(x=X, y=Y, color=factor(value))) + geom_point() + facet_grid(variable ~ .)
 # sigmoid kernel with different gamma hyperparameters
 # 0.478
 sigmoid.gamma1.svm.fit <- svm(Label~X+Y, data=df, kernel='sigmoid', gamma=1)
